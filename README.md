@@ -12,24 +12,24 @@ At the time of writing the Structures team is coordinating with the rest of PSP 
 Proper Points of Contact for any of the code within include:
 
 Thomas Neidlein (Project Engineer)
-tneidlei@purdue.edu
-(630) 853-0049
+- tneidlei@purdue.edu
+- (630) 853-0049
 
 Mahmoud Harraz (Structures Lead)
-mharraz@purdue.edu
-(765) 714-6187
+- mharraz@purdue.edu
+- (765) 714-6187
 
 Amrit Arora (Structural Analysis Lead)
-amritarora2002@gmail.com
-(650) 285-9651
+- amritarora2002@gmail.com
+- (650) 285-9651
 
 Colette Guy (Structures R&D Co-Lead)
-cnguy@purdue.edu
-(845) 263-9660
+- cnguy@purdue.edu
+- (845) 263-9660
 
 Michael Hammer (Structures R&D Co-Lead)
-mthammer@purdue.edu
-(574) 377-9399
+- mthammer@purdue.edu
+- (574) 377-9399
 
 
 
