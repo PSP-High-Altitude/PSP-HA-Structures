@@ -20,7 +20,7 @@ Mahmoud Harraz (Structures Lead)
 - (765) 714-6187
 
 Amrit Arora (Structural Analysis Lead)
-- amritarora2002@gmail.com
+- arora112@purdue.edu
 - (650) 285-9651
 
 Colette Guy (Structures R&D Co-Lead)
