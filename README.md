@@ -11,6 +11,10 @@ At the time of writing the Structures team is coordinating with the rest of PSP 
 
 Proper Points of Contact for any of the code within include:
 
+Amrit Arora (Structural Analysis Lead)
+- arora112@purdue.edu
+- (650) 285-9651
+
 Thomas Neidlein (Project Engineer)
 - tneidlei@purdue.edu
 - (630) 853-0049
@@ -18,10 +22,6 @@ Thomas Neidlein (Project Engineer)
 Mahmoud Harraz (Structures Lead)
 - mharraz@purdue.edu
 - (765) 714-6187
-
-Amrit Arora (Structural Analysis Lead)
-- arora112@purdue.edu
-- (650) 285-9651
 
 Colette Guy (Structures R&D Co-Lead)
 - cnguy@purdue.edu
