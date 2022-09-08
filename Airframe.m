@@ -275,7 +275,7 @@ classdef Airframe < handle
             % Property          Variable Name           Units
             % Johnson Buckling  JBS                     ksi
             
-            r = sqrt((OR^2+IR^2)/4); % Radius of Gyration along Y axis(axis of symmetry)
+            r = sqrt((OR^2+IR^2)/2); % Radius of Gyration along Y axis(axis of symmetry)
             half_Y = Y/2;  % Half of the yield Strength
             
             obj.JBS = half_Y - ((half_Y*2*L)/(2*pi*r))^2 * (1/E);
@@ -298,7 +298,7 @@ classdef Airframe < handle
             % Property          Variable Name           Units
             % Euler Buckling    EBS                     ksi
             
-            r = sqrt((OR^2+IR^2)/4);
+            r = sqrt((OR^2+IR^2)/2);
             obj.EBS = (pi^2 * E)/((2*(L/r))^2); 
             
         end
