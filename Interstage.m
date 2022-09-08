@@ -11,6 +11,9 @@ classdef Interstage < handle
         PROFILE;
         MASS;
         CoM;
+        MoIx_IS;
+        MoIy_IS;
+        MoIz_IS;
     end
     
     methods
@@ -50,6 +53,23 @@ classdef Interstage < handle
             obj.CoM = Moment/Mass;
             
         end
+       
+        function MoI_IS(obj, OD1, L, t, MASS)
+            c = 0.9; %Constant for assuming that the interstage is a cylinder
+            OR = OD1 / 2;
+            IR = OD1 / 2 - t;
+            
+            moix = c *1/12 * MASS * (3*(OR^2+IR^2) + L^2);
+            moiy = c * 1/12 * MASS * (3*(OR^2+IR^2) + L^2);
+            moiz = c * 1/2 * MASS * (OR^2+IR^2);
+        
+            obj.MoIx_IS = moix;
+            obj.MoIy_IS = moiy;
+            obj.MoIz_IS = moiz;
+            
+        end
+        
     end
+    
 end
 

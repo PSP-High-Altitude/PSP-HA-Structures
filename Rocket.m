@@ -75,7 +75,7 @@ classdef Rocket < handle
             PROP = [obj.AF2.PM, obj.NC2.L + obj.AF2.L - obj.AF2.NZ_t - obj.AF2.PL/2];   % Propellant Mass
             %NZ = [obj.AF2.NZ_MASS, obj.NC2.L + obj.AF2.L - obj.AF2.NZ_t/2];             % Nozzle
             NZ = [obj.AF2.NZ_MASS, obj.NC2.L+obj.AF2.L-obj.AF2.NZ_t-obj.AF2.FBH_t/2];     % Nozzle
-            FN = [obj.FN2.MASS, obj.NC2.L + obj.AF2.L - obj.FN2.RC + obj.FN2.CoM];       % Fins
+            FN = [obj.FN2.MASS, obj.NC2.L + obj.AF2.L - obj.FN2.RC + obj.FN2.CoM_y];       % Fins
            
             Rocket = [NC; AF; MC; MCSC; BH1; PL; BH2; DCSC; DC; FBH; PROP; NZ; FN];
             %Rocket = [NC; AF; MC; MCSC; BH1; PL; BH2; DCSC; DC; FBH; NZ; FN];
@@ -105,7 +105,7 @@ classdef Rocket < handle
             PROP = [PM, obj.NC2.L + obj.AF2.L - obj.AF2.NZ_t - obj.AF2.PL/2];   % Propellant Mass
             %NZ = [obj.AF2.NZ_MASS, obj.NC2.L + obj.AF2.L - obj.AF2.NZ_t/2];             % Nozzle
             NZ = [obj.AF2.NZ_MASS, obj.NC2.L+obj.AF2.L-obj.AF2.NZ_t-obj.AF2.FBH_t/2];     % Nozzle
-            FN = [obj.FN2.MASS, obj.NC2.L + obj.AF2.L - obj.FN2.RC + obj.FN2.CoM];       % Fins
+            FN = [obj.FN2.MASS, obj.NC2.L + obj.AF2.L - obj.FN2.RC + obj.FN2.CoM_y];       % Fins
            
             Rocket = [NC; AF; MC; MCSC; BH1; PL; BH2; DCSC; DC; FBH; PROP; NZ; FN];
             %Rocket = [NC; AF; MC; MCSC; BH1; PL; BH2; DCSC; DC; FBH; NZ; FN];
@@ -149,7 +149,7 @@ classdef Rocket < handle
             DCSC = [0.013, obj.IS1.L + 37 + 1];             % DC shock cord
             DC = [0.104, obj.IS1.L + 47 + 5];               % Drogue Chute(DC)
             PROP = [obj.AF1.PM, CA(1,2)];                   % Propellant mass
-            FN = [obj.FN1.MASS, obj.IS1.L+obj.AF1.L_a-obj.FN1.RC+obj.FN1.CoM];
+            FN = [obj.FN1.MASS, obj.IS1.L+obj.AF1.L_a-obj.FN1.RC+obj.FN1.CoM_y];
             
             Rocket = [IS; AF; CA; FBH; NZ; MC; MCSC; BH1; PL; BH2; DCSC; DC; PROP; FN];
             Moment = 0;
@@ -180,7 +180,7 @@ classdef Rocket < handle
             DCSC = [0.013, obj.IS1.L + 37 + 1];             % DC shock cord
             DC = [0.104, obj.IS1.L + 47 + 5];               % Drogue Chute(DC)
             PROP = [PM, CA(1,2)];                   % Propellant mass
-            FN = [obj.FN1.MASS, obj.IS1.L+obj.AF1.L_a-obj.FN1.RC+obj.FN1.CoM];
+            FN = [obj.FN1.MASS, obj.IS1.L+obj.AF1.L_a-obj.FN1.RC+obj.FN1.CoM_y];
             
             Rocket = [IS; AF; CA; FBH; NZ; MC; MCSC; BH1; PL; BH2; DCSC; DC; PROP; FN];
             Moment = 0;

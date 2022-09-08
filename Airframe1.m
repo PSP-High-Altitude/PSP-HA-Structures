@@ -1,6 +1,7 @@
 classdef Airframe1 < handle
     %AIRFRAME2 Summary of this class goes here
-    %   Detailed explanation goes here
+    %   Detailed explanation goes here 
+    %   First stage
     
     properties
         %inputs
@@ -56,6 +57,15 @@ classdef Airframe1 < handle
         L_a;
         L_c;
         CoM;
+        MoIx_a;       % Mass moment of inertia about x-axis (aerostructure), lb-ft*s^2   
+        MoIy_a;       % Mass moment of inertia about y-axis (aerostructure), lb-ft*s^2
+        MoIz_a;       % Mass moment of inertia about z-axis (aerostructure), lb-ft*s^2
+        MoIx_c;       % Mass moment of inertia about x-axis (motor casing), lb-ft*s^2   
+        MoIy_c;       % Mass moment of inertia about y-axis (motor casing), lb-ft*s^2
+        MoIz_c;       % Mass moment of inertia about z-axis (motor casing), lb-ft*s^2
+        MoIx_prop;
+        MoIy_prop;
+        MoIz_prop;
     end
     
     methods
@@ -108,7 +118,7 @@ classdef Airframe1 < handle
                 obj.SF = obj.EBS/obj.AS;
             end
             
-            
+            obj.Moment_of_Inertia_a(obj.OD_a/2, obj.ID_a/2, obj.L_a, obj.MASS_a);
             
         end
         
@@ -132,7 +142,7 @@ classdef Airframe1 < handle
             % Property          Variable Name           Units
             % Inner diameter    ID                      in
             
-            HS_max = Y/5;
+            HS_max = Y/2;
             obj.ID_c = (2 * HS_max * OD - MEOP * OD)/(MEOP + 2 * HS_max);
 
         end
@@ -257,6 +267,67 @@ classdef Airframe1 < handle
         
         function Center_of_Mass(obj)
             obj.CoM = obj.L_a/2;
+        end
+        
+        function Moment_of_Inertia_a(obj, OR_a, IR_a, L_a, Mass_a) 
+            % This function uses the inner radius and outer radius to
+            % calculate the 2nd moment of area(MoI) of the airframe about the 3
+            % principle axes(X, Y, Z).
+            % 
+            % Inputs:
+            % Property          Variable Name           Units
+            % Inner radius      IR_a                      in
+            % Outer radius      OR_a                      in
+            % 
+            % Outputs(assingments):
+            % Property          Variable Name           Units
+            % MoI about x       moix_a                    lb-ft*s^2
+            % MoI about y       moiy_a                    lb-ft*s^2
+            % MoI about z       moiz_a                    lb-ft*s^2
+            
+            moix = 1/12 * Mass_a * (3*(OR_a^2+IR_a^2) + L_a^2);
+            moiy = 1/12 * Mass_a * (3*(OR_a^2+IR_a^2) + L_a^2);
+            moiz = 1/2 * Mass_a * (OR_a^2+IR_a^2);
+            
+            obj.MoIx_a = moix;
+            obj.MoIy_a = moiy;
+            obj.MoIz_a = moiz;
+            
+        end
+        function Moment_of_Inertia_c(obj, OR_c, IR_c, L_c, Mass_c) 
+            % This function uses the inner radius and outer radius to
+            % calculate the 2nd moment of area(MoI) of the airframe motor casing about the 3
+            % principle axes(X, Y, Z).
+            % 
+            % Inputs:
+            % Property          Variable Name           Units
+            % Inner radius      IR_c                      in
+            % Outer radius      OR_c                      in
+            % 
+            % Outputs(assingments):
+            % Property          Variable Name           Units
+            % MoI about x       moix_c                    lb-ft*s^2
+            % MoI about y       moiy_c                    lb-ft*s^2
+            % MoI about z       moiz_c                    lb-ft*s^2
+            
+            moix = 1/12 * Mass_c * (3*(OR_c^2+IR_c^2) + L_c^2);
+            moiy = 1/12 * Mass_c * (3*(OR_c^2+IR_c^2) + L_c^2);
+            moiz = 1/2 * Mass_c * (OR_c^2+IR_c^2);
+            
+            obj.MoIx_c = moix;
+            obj.MoIy_c = moiy;
+            obj.MoIz_c = moiz;
+            
+        end
+        %Add the propellant mass 
+        function Moment_of_Inertia_Propellant(obj, OR, IR, L, PM)
+            moix = 1/12 * PM * (3*(OR^2+IR^2) + L^2);
+            moiy = 1/12 * PM * (3*(OR^2+IR^2) + L^2);
+            moiz = 1/2 * PM * (OR^2+IR^2);
+        
+            obj.MoIx_prop = moix;
+            obj.MoIy_prop = moiy;
+            obj.MoIz_prop= moiz;
         end
         
     end

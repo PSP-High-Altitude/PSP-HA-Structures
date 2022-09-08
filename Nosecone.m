@@ -31,6 +31,12 @@ classdef Nosecone < handle
         NCCL;
         NCBS;
         CoM;
+        MoIy_tip;
+        MoIx_tip;
+        MoIz_tip;
+        MoIx_nc;
+        MoIy_nc;
+        MoIz_nc;
         
     end
     
@@ -54,6 +60,7 @@ classdef Nosecone < handle
             obj.Nosecone_Mass(obj.SHAPE, obj.PARAMETER, obj.t, obj.L, obj.AF_t, obj.AF_ID, obj.rho1, obj.rho2, obj.tip_L);
             obj.NC_Buckling(obj.E, obj.t, obj.v);
             obj.Center_of_Mass(0, obj.L+obj.tip_L, 0, obj.PROFILE, obj.L);
+            Moment_of_Inertia_nc();
         end
         
         function Nosecone_Mass(obj, shape, shapeParameter, wallThickness, length, AF_thickness, AF_inner_diameter, tipDensity, bodyDensity, tipLength)
@@ -113,6 +120,41 @@ classdef Nosecone < handle
             obj.CoM = Moment/Mass;
             
         end
+        
+        %Moment of Inertia 
+        function Moment_of_Inertia_nc(obj, MASS,tip_L, AF_ID, AF_t)
+            AF_OD = AF_ID + 2 * AF_t;
+            c = 0.7; %constant for assuming the moment for the nosecone is equivalent to that of a cylinder
+
+            MoI_z = (3/10) * Mass * ((AF_OD / 2) ^ 2 - (AF_ID / 2) ^ 2);
+            MoI_x = c * 1/12 * MASS * ((3*((AF_OD / 2)^2+(AF_IF / 2)^2)) + tip_L^2); 
+            MoI_y = c * 1/12 * MASS * ((3*((AF_OD / 2)^2+(AF_IF / 2)^2)) + tip_L^2); 
+
+            obj.MoIz_nc = MoI_z;
+            obj.MoIy_nc = MoI_y;
+            obj.MoIx_nc = MoI_x;
+
+        end
+
+
+        function Moment_of_Inertia_tip(obj, MASS_tip, tip_L)
+
+            OR = tip_L / 5; %5 to 1 ratio
+            c = 0.7; %constant for assuming the moment for the nosecone tip is equivalent to that of a cylinder
+            MoI_z = (3/10) * Mass_tip * (OR ^ 2);
+            MoI_x = c * ((1/4) * Mass_tip * (OR) ^ 2 + 1/12 * Mass_tip * tip_L ^ 2);
+            MoI_y = c * ((1/4) * Mass_tip * (OR) ^ 2 + 1/12 * Mass_tip * tip_L ^ 2);
+
+            obj.MoIz_tip = MoI_z;
+            obj.MoIx_tip = MoI_x;
+            obj.MoIy_tip = MoI_y;
+
+        end 
+
+
+
+%Combine both moments of inertia to get a final one for the nosecone and
+%the nosecone tip combined
     end
 end
 
@@ -134,3 +176,6 @@ function tipVol = calcTipVol(shapeFunction, tipLength)
     integrand = @(x) shapeFunction(x) .^2;
     tipVol = pi * integral(integrand, 0, tipLength);
 end
+
+
+

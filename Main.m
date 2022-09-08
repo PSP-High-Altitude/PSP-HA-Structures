@@ -3,25 +3,17 @@ clc;
 point_design_ID = 10509101316;
 data = read_Data("test") * 2.20462;
 data2 = read_Data("test2") * 2.20462;
-data3 = read_Data("test3");
 stg2_PM = data(1);
 stg1_PM = data2(1);
-stg2_diameter = data3(1);
-stg1_diameter = data3(2);
-stg2_MEOP = data3(3) * 2/1000;
-stg1_MEOP = data3(4) * 2/1000;
-max_a = data3(5);
-max_drag = data3(6);
-payload = data(7) * 2.20462;
-Net_Force = 1.5 * ((198/2.20462)* max_a + max_drag)/(4.448*1000);  % 1.5x (M_rocket * Max_acc + Max_F_drag), kilopound-force
-AF2 = Airframe(stg2_diameter, stg2_MEOP, stg2_PM, 0.0686, 14500, 72.5, 0.3, 0.162, Net_Force);  % 2nd stage airframe obj
-NC2 = Nosecone(2, 0, AF2.t, AF2.t, 15, 0, AF2.ID, 0, 0.162, 14500, 0.3, 72.5, Net_Force);  % 2nd stage nosecone obj
+Net_Force = 1.5 * ((118.5014/2.20462)* 347.8159 + 3037.4)/(4.448*1000);  % 1.5x (M_rocket * Max_acc + Max_F_drag), kilopound-force
+AF2 = Airframe(4.5, 1.2, stg2_PM, 0.0686, 14500, 72.5, 0.3, 0.162, Net_Force);  % 2nd stage airframe obj
+NC2 = Nosecone(2, 0, AF2.t, AF2.t, 22.5, 0, AF2.ID, 0, 0.162, 14500, 0.3, 72.5, Net_Force);  % 2nd stage nosecone obj
 FN2 = Fins(15, 5, 5, .125, 4, .162, 8);  % 2nd stage fins obj
 
-AF1 = Airframe1(stg1_diameter, [0.162,14500,0.3,72.5], [0.0813,14489,0.286,106.7],stg1_MEOP, 0.0686, stg1_PM, Net_Force);
+AF1 = Airframe1(4.5, [0.162,14500,0.3,72.5], [0.0813,14489,0.286,106.7],2.205, 0.0686, stg1_PM, Net_Force);
 IS1 = Interstage(AF2.OD, AF1.OD_a, 6, 0.125, 0.162);
 FN1 = Fins(15, 5, 5, .125, 4, 0.0813, 8);
-RK = Rocket(NC2, AF2, FN2, IS1, AF1, FN1, 0, 0, payload, data, data2);
+RK = Rocket(NC2, AF2, FN2, IS1, AF1, FN1, 0, 0, 2.204, data, data2);
 
 
 disp("POINT DESIGN ID#: " + point_design_ID);
@@ -78,7 +70,7 @@ for i = 1:steps(2)
     CoM_i = moment_i/mass_i;
     CoM_hist = [CoM_hist, CoM_i];
 end
-CoM_hist
 
-
+%AF1.MoI to check values
+%FN2.CoM_x
 

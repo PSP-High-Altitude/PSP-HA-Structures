@@ -1,5 +1,5 @@
 function writeData(filename, dataVector)
-    filepath = "C:\Users\Amrit Arora\Desktop\Mass_Data\" + filename + ".txt";
+    filepath = "C:\Data\Purdue\Purdue Space Program\High Altitude\Mass Estimation\PSP-HA-Structures-main\" + filename + ".txt";
     fid = fopen(filepath, 'w');
     items = size(dataVector);
     for i = 1:1:items(2)

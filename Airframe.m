@@ -4,7 +4,8 @@ classdef Airframe < handle
     %   minimum diameter aiframe using built in safety factors. Along with 
     %   those dimensions, certain strucutral and physical properties are
     %   calculated to be used in the analysis and evaluation of the design.
-    % 
+    %   Z is the axis of the rocket
+    %   Second Stage
     
     properties
         % GEOMETRIC PROPERTIES
@@ -51,9 +52,12 @@ classdef Airframe < handle
         AS;         % Applied stress due to force at max Q, ksi
         CT;         % Column Type, unitless
         CoM;        % Center of Mass, in
-        MoIx;       % Mass moment of inertia about x-axis, lb-ft*s^2   
-        MoIy;       % Mass moment of inertia about y-axis, lb-ft*s^2
-        MoIz;       % Mass moment of inertia about z-axis, lb-ft*s^2
+        MoIx_af1;       % Mass moment of inertia about x-axis, lb-ft*s^2   
+        MoIy_af1;       % Mass moment of inertia about y-axis, lb-ft*s^2
+        MoIz_af1;       % Mass moment of inertia about z-axis, lb-ft*s^2
+        MoIx_prop;       % Mass moment of inertia about x-axis, lb-ft*s^2   
+        MoIy_prop;       % Mass moment of inertia about y-axis, lb-ft*s^2
+        MoIz_prop;       % Mass moment of inertia about z-axis, lb-ft*s^2
         
     end
     
@@ -123,7 +127,7 @@ classdef Airframe < handle
             % Property          Variable Name           Units
             % Inner diameter    ID                      in
             
-            HS_max = Y/5;
+            HS_max = Y/2;
             obj.ID = (2 * HS_max * OD - MEOP * OD)/(MEOP + 2 * HS_max);
 
         end
@@ -323,10 +327,20 @@ classdef Airframe < handle
             moiy = 1/12 * Mass * (3*(OR^2+IR^2) + L^2);
             moiz = 1/2 * Mass * (OR^2+IR^2);
             
-            obj.MoIx = moix;
-            obj.MoIy = moiy;
-            obj.MoIz = moiz;
+            obj.MoIx_af1 = moix;
+            obj.MoIy_af1 = moiy;
+            obj.MoIz_af1 = moiz;
             
+        end
+        %Add the propellant mass
+        function Moment_of_Inertia_Propellant(obj, OR, IR, L, PM)
+            moix = 1/12 * PM * (3*(OR^2+IR^2) + L^2);
+            moiy = 1/12 * PM * (3*(OR^2+IR^2) + L^2);
+            moiz = 1/2 * PM * (OR^2+IR^2);
+        
+            obj.MoIx_prop = moix;
+            obj.MoIy_prop = moiy;
+            obj.MoIz_prop= moiz;
         end
     end
 end

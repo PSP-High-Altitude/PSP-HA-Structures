@@ -8,7 +8,7 @@ classdef Fins < handle
         TC;         % Tip Chord, in
         SPAN;       % Span, in
         t;          % Thickness, in
-        SL;        % Sweep Length, in
+        SL;         % Sweep Length, in
         FIN_COUNT;  % Number of fins, unitless
        
         % Material Properties
@@ -16,7 +16,9 @@ classdef Fins < handle
         
         % Design Criteria
         MASS;
-        CoM;
+        CoM_y;
+        CoM_x;
+        
     end
     
     methods
@@ -47,14 +49,43 @@ classdef Fins < handle
         function Center_of_Mass(obj, RC, TC, SL, Span)
             leading_edge = @(x) -SL/Span .* x + RC;
             trailing_edge = @(x) (RC-SL-TC)/Span .* x;
-            moment_fun = @(x, y) y;
+            moment_fun_y = @(x, y) y;
+            moment_fun_x = @(x, y) x;
             
-            Moment = integral2(moment_fun, 0, Span, trailing_edge, leading_edge);
+            Moment_y = integral2(moment_fun_y, 0, Span, trailing_edge, leading_edge);
+            Moment_x = integral2(moment_fun_x, 0, Span, trailing_edge, leading_edge);
             Mass = integral(leading_edge, 0, Span) - integral(trailing_edge, 0, Span);
             
-            obj.CoM = Moment/Mass;
-            
+            obj.CoM_y = Moment_y/Mass;
+            obj.CoM_x = Moment_x/Mass;
         end
+        
+        %We need the fins CoM in the x-axis as well
+%       function Moment_of_Inertia(obj, Mass, CoM_x, CoM_y)
+        % This function uses the mass of the fins and the center of mass
+        % to estimate the moment caused by the fins
+        %
+        % Assumptions:
+        % It assumes that the fin is a point mass with a center of mass
+        % (x,y)
+        % Inputs:
+        % Property               Variable Name           Units
+        % Fin Mass                    Mass                 kG
+        % Fin Center of Mass in Y     CoM_y                in
+        % Fin Center of Mass in X     CoM_X                in
+        %
+        % Outputs(assingments):
+        % Property          Variable Name           Units
+        % MoI about x       moix                    lb-ft*s^2
+        % MoI about y       moiy                    lb-ft*s^2
+        % MoI about z       moiz                    lb-ft*s^2    
+        %May not potentially need this if moment of inertia is just
+        %calculated in the main function for the fins with respect to the
+        %tip of the nosecone in the x, y, and z axes
+      
+            
+        %end
+        
     end
 end
 
