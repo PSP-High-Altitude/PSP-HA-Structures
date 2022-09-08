@@ -132,7 +132,7 @@ classdef Airframe1 < handle
             % Property          Variable Name           Units
             % Inner diameter    ID                      in
             
-            HS_max = Y/2;
+            HS_max = Y/5;
             obj.ID_c = (2 * HS_max * OD - MEOP * OD)/(MEOP + 2 * HS_max);
 
         end
