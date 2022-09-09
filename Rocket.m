@@ -33,7 +33,16 @@ classdef Rocket < handle
         CoM_Hist_2nd_Stage;
         CoM_1st_Stage;
         CoM_Hist_1st_Stage;
-        
+
+        MoIx_2nd_Stage;
+        MoIx_Hist_2nd_Stage;
+        MoIx_1st_Stage;
+        MoIx_Hist_1st_Stage;
+
+        MoIz_2nd_Stage;
+        MoIz_Hist_2nd_Stage;
+        MoIz_1st_Stage;
+        MoIz_Hist_1st_Stage;
        
     end
     
@@ -59,6 +68,12 @@ classdef Rocket < handle
             obj.First_Stage_CoM();
             obj.First_Stage_CoM_History(obj.PM_Hist_1st_Stage);
             %obj.Rocket_CoM_Hist(obj.CoM_Hist_1st_Stage, obj.MASS_Hist_1st_Stage);
+            
+            obj.Second_Stage_MoI();
+            %obj.Second_Stage_MoI_History(obj.PM_Hist_2nd_Stage);
+            obj.First_Stage_MoI();
+            %obj.First_Stage_MoI_History(obj.PM_Hist_1st_Stage);
+            
         end
         
         function Second_Stage_CoM(obj)
@@ -205,6 +220,53 @@ classdef Rocket < handle
             
             obj.MASS_Hist_1st_Stage = Mass_hist;
             obj.CoM_Hist_1st_Stage = CoM_hist;
+        end
+
+
+        %this function can calculate the MoI of all objects using
+        %parallel axis theorm. IF you don't need Parallax, then just input
+        %the RokCOM as a zero instead of calling the CoM function. 
+        function MoI = Parallax(RokCoM,Mass,MoIs,CoMs)
+            MoI = 0;
+            for i = 1:size(MoIs)
+                MoI = (MoI + MoIs(i)) + (Mass(i) * (RokCoM - CoMs(i))^2);
+            end
+            
+        end
+
+        function First_Stage_MoI(obj)
+            %3D Objects
+            IS = [obj.IS1.MASS, obj.IS1.MoIx_IS, obj.IS1.MoIy_IS, obj.IS1.MoIz_IS, obj.IS1.CoM];               % Interstage
+            AF = [obj.AF1.MASS_a, obj.AF1.MoIx_a1, obj.AF1.MoIy_a1, obj.AF1.MoIz_a1, obj.IS1.L+obj.AF1.CoM];   % Airframe(aero)
+            CA = [obj.AF1.MASS_c, obj.AF1.MoIx_c1, obj.AF1.MoIy_c1, obj.AF1.MoIz_c1, obj.IS1.L+obj.AF1.L_a-obj.AF1.NZ_t-obj.AF1.L_c/2];    % Motor Casing
+            PROP = [obj.AF1.PM, obj.AF1.MoIx_prop1, obj.AF1.MoIy_prop1, obj.AF1.MoIz_prop1, CA(1,2)];                   % Propellant
+
+            %Point Masses
+            FBH = [obj.AF1.FBH_MASS, obj.IS1.L+obj.AF1.L_a-obj.AF1.NZ_t-obj.AF1.L_c-obj.AF1.FBH_t/2];   % Forward Bulkhead
+            NZ = [obj.AF1.NZ_MASS, obj.IS1.L+obj.AF1.L_a-obj.AF1.NZ_t-obj.AF1.FBH_t/2];   % Nozzle
+            MC = [0.535, obj.IS1.L + 4.724 + 5];            % Main Chute(MC)
+            MCSC = [0.048, obj.IS1.L + 14.961 + 1];         % MC Shock cord 
+            BH1 = [1.355, obj.IS1.L + 17 + 1];              % First Bulkhead
+            PL = [obj.PL_MASS, obj.IS1.L + 20 + 7];         % Payload
+            BH2 = [1.355, obj.IS1.L + 35 + 1];              % Second bulkhead
+            DCSC = [0.013, obj.IS1.L + 37 + 1];             % DC shock cord
+            DC = [0.104, obj.IS1.L + 47 + 5];               % Drogue Chute(DC)
+            FN = [obj.FN1.MASS, obj.IS1.L+obj.AF1.L_a-obj.FN1.RC+obj.FN1.CoM_y];
+            
+            S1_CoM = First_Stage_CoM();
+
+            %split up the physical and point masses because they have different vector sizes.
+            Rocket3D = [IS; AF; CA; PROP];
+            RocketPt = [FBH; NZ; MC; MCSC; BH1; PL; BH2; DCSC; DC; FN];
+
+            MoIx3D = Parallax(S1_CoM, Rocket3D(1,:), Rocket3D(2,:), Rocket3D(5,:)); 
+            MoIxPt = Parallax(S1_CoM, RocketPt(1,:), zeros(1, size(RocketPt)), RocketPt(2,:));
+            obj.MoIx_1st_Stage = MoIx3D + MoIxPt;
+            
+            %point masses are centered around the centerline still, need to
+            %write a function that generates cylinders for them if time
+            %permits. 
+            obj.MoIz_1st_Stage = Parallax(0, Rocket3D(1,:), Rocket3D(4,:), Rocket3D(5,:));
         end
         
 %         function Rocket_CoM_History(obj, FS_CoM_Hist, FS_Mass_Hist)
